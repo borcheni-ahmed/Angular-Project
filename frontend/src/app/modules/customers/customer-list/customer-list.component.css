@@ -1,0 +1,109 @@
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+@keyframes dialogIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+:host { display: block; animation: fadeUp 0.5s ease forwards; }
+
+.table-row:hover { background: rgba(59,130,246,0.05) !important; }
+
+.skeleton-row {
+  background: linear-gradient(90deg, rgba(30,41,59,0.5) 25%, rgba(51,65,85,0.5) 50%, rgba(30,41,59,0.5) 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.confirm-dialog { animation: dialogIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.overlay { animation: overlayIn 0.2s ease forwards; }
+.ripple-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg,#3b82f6,#6366f1);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.ripple-link:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 16px rgba(59,130,246,0.25);
+}
+
+/* Active / click effect */
+.ripple-link:active {
+  transform: scale(0.95);
+}
+.edit-link {
+  background: rgba(59,130,246,0.1);
+  border: 1px solid rgba(59,130,246,0.2);
+  color: #60a5fa;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+/* Hover effect */
+.edit-link:hover {
+  background: rgba(59,130,246,0.2);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(59,130,246,0.2);
+}
+
+/* Active / click effect */
+.edit-link:active {
+  transform: scale(0.95);
+  box-shadow: none;
+}
+.delete-btn {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.2);
+  color: #f87171;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.delete-btn:hover {
+  background: rgba(239,68,68,0.2);
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 4px 12px rgba(239,68,68,0.25);
+}
+
+/* Active / click effect */
+.delete-btn:active {
+  transform: scale(0.95);
+  box-shadow: none;
+}

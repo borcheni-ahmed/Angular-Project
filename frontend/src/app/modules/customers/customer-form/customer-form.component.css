@@ -1,0 +1,233 @@
+/* PAGE */
+.customer-page {
+  padding: clamp(16px, 2vw, 32px);
+  min-height: 100%;
+  display: block;
+  animation: fadeUp 0.5s ease forwards;
+}
+
+/* HEADER */
+.header {
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  color: white;
+  font-size: clamp(18px, 2vw, 24px);
+  font-weight: 700;
+  margin: 0;
+}
+
+.header p {
+  color: #64748b;
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+/* FORM CARD */
+.form-card {
+  background: rgba(30,41,59,0.8);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 700px;
+}
+
+/* GRID */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-grid .full-width {
+  grid-column: 1 / -1;
+}
+
+/* LABELS */
+label {
+  display: block;
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+/* INPUTS */
+input, select {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(15,23,42,0.8);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 11px 16px;
+  color: white;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+/* Credit Hold Checkbox */
+.credit-hold {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(15,23,42,0.4);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.credit-hold input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #3b82f6;
+}
+
+.credit-hold label {
+  color: #cbd5e1;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.credit-hold p {
+  color: #475569;
+  font-size: 12px;
+  margin: 2px 0 0 0;
+}
+
+/* ERROR BOX */
+.error-box {
+  margin-top: 16px;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 10px;
+  padding: 12px;
+  color: #f87171;
+  font-size: 13px;
+  animation: shake 0.4s ease forwards;
+}
+
+/* VALIDATION STATES */
+input.invalid, select.invalid {
+  border-color: rgba(239,68,68,0.5) !important;
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+}
+
+input.valid {
+  border-color: rgba(34,197,94,0.5) !important;
+  box-shadow: 0 0 0 3px rgba(34,197,94,0.1);
+}
+
+input:focus, select:focus {
+  border-color: rgba(59,130,246,0.5) !important;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+
+/* BUTTONS */
+.form-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.form-buttons button {
+  background: linear-gradient(135deg,#3b82f6,#6366f1);
+  color: white;
+  padding: 11px 28px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-buttons a {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #94a3b8;
+  padding: 11px 28px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ANIMATIONS */
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.primary-btn {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: white;
+  padding: 11px 28px;
+  border-radius: 10px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover effect */
+.primary-btn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 16px rgba(59,130,246,0.25);
+}
+
+/* Active / click effect */
+.primary-btn:active:not(:disabled) {
+  transform: scale(0.95);
+  box-shadow: none;
+}
+
+/* Disabled state */
+.primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.secondary-btn {
+
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #94a3b8;
+  padding: 11px 28px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.secondary-btn:hover {
+  background: rgba(255,255,255,0.1);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(255,255,255,0.15);
+}
+
+/* Active / click effect */
+.secondary-btn:active {
+  transform: scale(0.95);
+  box-shadow: none;
+}

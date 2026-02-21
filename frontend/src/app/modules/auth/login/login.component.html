@@ -1,0 +1,123 @@
+<div style="position:fixed; top:0; left:0; width:100vw; height:100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); overflow:hidden;">
+
+  <!-- Particles Canvas -->
+  <canvas id="particlesCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0;"></canvas>
+
+  <div class="circle-1" style="position:fixed; top:-100px; right:-100px; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle, rgba(59,130,246,0.15), transparent); pointer-events:none;"></div>
+  <div class="circle-2" style="position:fixed; bottom:-100px; left:-100px; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle, rgba(99,102,241,0.15), transparent); pointer-events:none;"></div>
+
+  <div style="width:100%; max-width:420px; padding:24px; position:relative; z-index:10;">
+
+    <!-- Header -->
+    <div style="text-align:center; margin-bottom:32px;">
+      <!-- Animated Logo -->
+      <div class="logo-animate" style="display:inline-flex; align-items:center; justify-content:center; width:64px; height:64px; border-radius:20px; background:linear-gradient(135deg,#3b82f6,#6366f1); margin-bottom:16px; font-size:28px; box-shadow:0 0 30px rgba(99,102,241,0.4);">
+        📊
+      </div>
+      <!-- Typing animation title -->
+      <h1 class="typing-title" style="color:white; font-size:28px; font-weight:700; margin:0; letter-spacing:-0.5px; min-height:40px;"></h1>
+      <p class="fancy-text">
+        {{ isLoginMode ? 'Sign in to your account' : 'Create a new account' }}
+      </p>
+    </div>
+
+    <!-- Floating wrapper -->
+    <div class="floating-wrapper">
+      <div class="login-card" style="background:rgba(30,41,59,0.9); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:32px; backdrop-filter:blur(20px); box-shadow:0 25px 50px rgba(0,0,0,0.5);">
+
+        <!-- LOGIN FORM -->
+        <form *ngIf="isLoginMode" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <div style="margin-bottom:20px;">
+            <label style="display:block; color:#cbd5e1; font-size:13px; font-weight:500; margin-bottom:8px;">Username</label>
+            <div style="position:relative;">
+              <input formControlName="username" type="text" placeholder="Enter your username"
+                     class="glow-input"
+                     style="width:100%; box-sizing:border-box; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px 16px 12px 42px; color:white; font-size:14px; outline:none; transition:all 0.3s;"/>
+              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:16px;">👤</span>
+            </div>
+          </div>
+
+          <div style="margin-bottom:24px;">
+            <label style="display:block; color:#cbd5e1; font-size:13px; font-weight:500; margin-bottom:8px;">Password</label>
+            <div style="position:relative;">
+              <input formControlName="password" type="password" placeholder="Enter your password"
+                     class="glow-input"
+                     style="width:100%; box-sizing:border-box; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px 16px 12px 42px; color:white; font-size:14px; outline:none; transition:all 0.3s;"/>
+              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:16px;">🔒</span>
+            </div>
+          </div>
+
+          <div *ngIf="error" style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); border-radius:10px; padding:12px; color:#f87171; font-size:13px; text-align:center; margin-bottom:16px;">
+            {{ error }}
+          </div>
+
+          <button type="submit" [disabled]="loading" class="primary-btn ripple-btn">
+            {{ loading ? 'Signing in...' : 'Sign In' }}
+          </button>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form *ngIf="!isLoginMode" [formGroup]="registerForm" (ngSubmit)="onRegister()">
+          <div style="margin-bottom:16px;">
+            <label style="display:block; color:#cbd5e1; font-size:13px; font-weight:500; margin-bottom:8px;">Username</label>
+            <div style="position:relative;">
+              <input formControlName="username" type="text" placeholder="Choose a username"
+                     class="glow-input"
+                     style="width:100%; box-sizing:border-box; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px 16px 12px 42px; color:white; font-size:14px; outline:none;"/>
+              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:16px;">👤</span>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <label style="display:block; color:#cbd5e1; font-size:13px; font-weight:500; margin-bottom:8px;">Email</label>
+            <div style="position:relative;">
+              <input formControlName="email" type="email" placeholder="Enter your email"
+                     class="glow-input"
+                     style="width:100%; box-sizing:border-box; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px 16px 12px 42px; color:white; font-size:14px; outline:none;"/>
+              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:16px;">📧</span>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <label style="display:block; color:#cbd5e1; font-size:13px; font-weight:500; margin-bottom:8px;">Password</label>
+            <div style="position:relative;">
+              <input formControlName="password" type="password" placeholder="Min 6 characters"
+                     class="glow-input"
+                     style="width:100%; box-sizing:border-box; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px 16px 12px 42px; color:white; font-size:14px; outline:none;"/>
+              <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:16px;">🔒</span>
+            </div>
+          </div>
+
+          <div style="margin-bottom:24px;">
+            <label style="display:block; color:#cbd5e1; font-size:13px; font-weight:500; margin-bottom:8px;">Role</label>
+            <select formControlName="role" class="glow-input"
+                    style="width:100%; box-sizing:border-box; background:rgba(15,23,42,0.8); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:12px 16px; color:white; font-size:14px; outline:none;">
+              <option value="User" style="background:#1e293b;">User</option>
+              <option value="Admin" style="background:#1e293b;">Admin</option>
+            </select>
+          </div>
+
+          <div *ngIf="error" style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); border-radius:10px; padding:12px; color:#f87171; font-size:13px; text-align:center; margin-bottom:16px;">
+            {{ error }}
+          </div>
+
+          <button type="submit" [disabled]="loading" class="primary-btn ripple-btn register-btn"
+                  style="width:100%; padding:13px; border-radius:12px; border:none; background:linear-gradient(135deg,#10b981,#059669); color:white; font-size:15px; font-weight:600; cursor:pointer; position:relative; overflow:hidden;"
+                  [style.opacity]="loading ? '0.6' : '1'">
+            {{ loading ? 'Registering...' : 'Create Account' }}
+          </button>
+        </form>
+
+        <!-- Toggle -->
+        <div style="margin-top:24px; text-align:center;">
+          <span style="color:#64748b; font-size:13px;">
+            {{ isLoginMode ? "Don't have an account?" : "Already have an account?" }}
+          </span>
+          <button (click)="toggleMode()" class="link-btn">
+            {{ isLoginMode ? 'Register' : 'Sign In' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

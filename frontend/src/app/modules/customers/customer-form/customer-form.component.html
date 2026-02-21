@@ -1,0 +1,83 @@
+<div class="customer-page">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>{{ isEdit ? 'Edit Customer' : 'Add Customer' }}</h1>
+    <p>{{ isEdit ? 'Update customer information' : 'Create a new customer record' }}</p>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <div class="form-grid">
+
+        <!-- Customer Name -->
+        <div class="full-width">
+          <label>Customer Name *</label>
+          <input formControlName="customerName" type="text" placeholder="Enter customer name"/>
+        </div>
+
+        <!-- Phone -->
+        <div>
+          <label>Phone Number</label>
+          <input formControlName="phoneNumber" type="text" placeholder="Enter phone number"/>
+        </div>
+
+        <!-- Discount -->
+        <div>
+          <label>Discount %</label>
+          <input formControlName="standardDiscountPercentage" type="number" placeholder="0"/>
+        </div>
+
+        <!-- Address Line 1 -->
+        <div>
+          <label>Address Line 1</label>
+          <input formControlName="deliveryAddressLine1" type="text" placeholder="Street address"/>
+        </div>
+
+        <!-- Address Line 2 -->
+        <div>
+          <label>Address Line 2</label>
+          <input formControlName="deliveryAddressLine2" type="text" placeholder="Apt, suite, etc."/>
+        </div>
+
+        <!-- Postal Code -->
+        <div>
+          <label>Postal Code</label>
+          <input formControlName="postalCode" type="text" placeholder="Enter postal code"/>
+        </div>
+
+        <!-- Payment Days -->
+        <div>
+          <label>Payment Days</label>
+          <input formControlName="paymentDays" type="number" placeholder="0"/>
+        </div>
+
+        <!-- Credit Hold -->
+        <div class="credit-hold">
+          <input formControlName="isOnCreditHold" type="checkbox" id="creditHold"/>
+          <div>
+            <label for="creditHold">On Credit Hold</label>
+            <p>Customer cannot place new orders when on credit hold</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="error" class="error-box">
+        {{ error }}
+      </div>
+
+      <!-- Buttons -->
+      <div class="form-buttons">
+        <button type="submit" [disabled]="loading" class="primary-btn">
+          {{ loading ? 'Saving...' : (isEdit ? 'Update Customer' : 'Create Customer') }}
+        </button>
+        <a routerLink="/customers" class="secondary-btn">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+</div>

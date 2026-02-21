@@ -1,0 +1,104 @@
+<div style="padding:clamp(16px,2vw,32px); min-height:100%;">
+
+  <!-- Header -->
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <div>
+      <h1 style="color:white; font-size:clamp(18px,2vw,24px); font-weight:700; margin:0;">Customers</h1>
+      <p style="color:#64748b; margin-top:4px; font-size:14px;">{{ filtered.length }} customers found</p>
+    </div>
+    <a *ngIf="isAdmin" routerLink="/customers/create" class="ripple-link">
+      + Add Customer
+    </a>
+  </div>
+
+  <!-- Search -->
+  <div style="margin-bottom:20px; position:relative;">
+    <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#475569; font-size:16px;">🔍</span>
+    <input [(ngModel)]="searchTerm" (input)="search()" placeholder="Search by name, phone, address..."
+           style="width:100%; box-sizing:border-box; background:rgba(30,41,59,0.8); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:12px 16px 12px 42px; color:white; font-size:14px; outline:none;"/>
+  </div>
+
+  <!-- Skeleton Loading -->
+  <div *ngIf="loading">
+    <div *ngFor="let i of [1,2,3,4,5]" class="skeleton-row"
+         style="background:rgba(30,41,59,0.5); border-radius:10px; height:52px; margin-bottom:8px;"></div>
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="!loading" style="background:rgba(30,41,59,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:16px; overflow:hidden;">
+    <table style="width:100%; border-collapse:collapse; font-size:14px;">
+      <thead>
+      <tr style="background:rgba(15,23,42,0.5); border-bottom:1px solid rgba(255,255,255,0.06);">
+        <th style="padding:14px 20px; text-align:left; color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">ID</th>
+        <th style="padding:14px 20px; text-align:left; color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Name</th>
+        <th style="padding:14px 20px; text-align:left; color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Phone</th>
+        <th style="padding:14px 20px; text-align:left; color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Address</th>
+        <th style="padding:14px 20px; text-align:left; color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Discount</th>
+        <th style="padding:14px 20px; text-align:left; color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Credit Hold</th>
+        <th *ngIf="isAdmin" style="padding:14px 20px; text-align:left; color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let c of filtered" class="table-row"
+          style="border-bottom:1px solid rgba(255,255,255,0.04); transition:background 0.2s;">
+        <td style="padding:14px 20px; color:#475569; font-size:13px;">{{ c.customerID }}</td>
+        <td style="padding:14px 20px; color:white; font-weight:500;">{{ c.customerName }}</td>
+        <td style="padding:14px 20px; color:#94a3b8;">{{ c.phoneNumber }}</td>
+        <td style="padding:14px 20px; color:#94a3b8;">{{ c.deliveryAddressLine1 }}</td>
+        <td style="padding:14px 20px;">
+            <span style="background:rgba(59,130,246,0.1); border:1px solid rgba(59,130,246,0.2); color:#60a5fa; padding:2px 10px; border-radius:20px; font-size:12px; font-weight:500;">
+              {{ c.standardDiscountPercentage }}%
+            </span>
+        </td>
+        <td style="padding:14px 20px;">
+            <span [style]="c.isOnCreditHold ?
+              'background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); color:#f87171; padding:2px 10px; border-radius:20px; font-size:12px;' :
+              'background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.2); color:#4ade80; padding:2px 10px; border-radius:20px; font-size:12px;'">
+              {{ c.isOnCreditHold ? '🔴 Yes' : '🟢 No' }}
+            </span>
+        </td>
+        <td *ngIf="isAdmin" style="padding:14px 20px;">
+          <div style="display:flex; gap:8px;">
+            <a [routerLink]="['/customers/edit', c.customerID]" class="edit-link">
+              ✏️ Edit
+            </a>
+            <button (click)="askDelete(c.customerID)" class="delete-btn">
+              🗑️ Delete
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- Empty state -->
+    <div *ngIf="filtered.length === 0"
+         style="text-align:center; padding:48px; color:#475569;">
+      <div style="font-size:48px; margin-bottom:12px;">🔍</div>
+      <p style="font-size:15px; font-weight:500; color:#64748b;">No customers found</p>
+      <p style="font-size:13px; color:#475569; margin-top:4px;">Try a different search term</p>
+    </div>
+  </div>
+
+  <!-- Custom Confirm Dialog -->
+  <div *ngIf="confirmDelete" class="overlay"
+       style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:1000; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
+    <div class="confirm-dialog"
+         style="background:#1e293b; border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:32px; max-width:400px; width:90%; text-align:center; box-shadow:0 25px 50px rgba(0,0,0,0.5);">
+      <div style="font-size:48px; margin-bottom:16px;">🗑️</div>
+      <h3 style="color:white; font-size:18px; font-weight:700; margin:0 0 8px 0;">Delete Customer?</h3>
+      <p style="color:#64748b; font-size:14px; margin:0 0 24px 0;">This action cannot be undone. The customer record will be permanently removed.</p>
+      <div style="display:flex; gap:12px; justify-content:center;">
+        <button (click)="cancelDelete()"
+                style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#94a3b8; padding:10px 24px; border-radius:10px; font-size:14px; font-weight:500; cursor:pointer;">
+          Cancel
+        </button>
+        <button (click)="confirmDeleteAction()"
+                style="background:linear-gradient(135deg,#ef4444,#dc2626); border:none; color:white; padding:10px 24px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;">
+          Yes, Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

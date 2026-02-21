@@ -1,0 +1,184 @@
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floating {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50%       { opacity: 0.25; transform: scale(1.1); }
+}
+
+@keyframes logoSpin {
+  0%   { transform: rotateY(0deg) scale(1); }
+  50%  { transform: rotateY(180deg) scale(1.1); }
+  100% { transform: rotateY(360deg) scale(1); }
+}
+
+@keyframes ripple {
+  from { transform: scale(0); opacity: 1; }
+  to   { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(99,102,241,0.3); }
+  50%       { box-shadow: 0 0 40px rgba(99,102,241,0.6); }
+}
+
+:host {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+}
+
+.login-card {
+  animation: fadeSlideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.floating-wrapper {
+  animation: floating 4s ease-in-out infinite;
+}
+
+.logo-animate {
+  animation: logoSpin 3s ease-in-out infinite, glow 3s ease-in-out infinite;
+}
+
+.circle-1 { animation: pulse 6s ease-in-out infinite; }
+.circle-2 { animation: pulse 8s ease-in-out infinite reverse; }
+
+.glow-input:focus {
+  border-color: rgba(99,102,241,0.6) !important;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.15), 0 0 20px rgba(99,102,241,0.1) !important;
+  background: rgba(15,23,42,0.95) !important;
+}
+
+.typing-title {
+  background: linear-gradient(135deg, #ffffff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+/* Link-style button with hover underline */
+.link-btn {
+  background: none;
+  border: none;
+  color: #60a5fa;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 6px;
+  position: relative;
+  padding: 2px 0;
+  transition: color 0.2s ease;
+}
+
+/* The underline effect */
+.link-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 0%;
+  background-color: #60a5fa;
+  transition: width 0.3s ease;
+}
+
+/* Hover expands the underline */
+.link-btn:hover::after {
+  width: 100%;
+}
+/* Fancy animated text */
+.fancy-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-top: 8px;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    #3b82f6, #6366f1, #10b981, #facc15, #f87171, #3b82f6
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow-shimmer 4s linear infinite;
+  transition: all 0.3s ease;
+}
+
+/* Optional: subtle hover pop */
+.fancy-text:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 4px rgba(255,255,255,0.5));
+}
+
+/* Keyframes for rainbow shimmer */
+@keyframes rainbow-shimmer {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 0%; }
+  100% { background-position: 0% 0%; }
+}
+/* Primary button style */
+.primary-btn {
+  width: 100%;
+  padding: 13px;
+  border-radius: 12px;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover lift & shadow */
+.primary-btn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 16px rgba(59,130,246,0.25);
+}
+
+/* Active / click effect */
+.primary-btn:active:not(:disabled) {
+  transform: scale(0.95);
+  box-shadow: none;
+}
+
+/* Disabled state */
+.primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Ripple effect */
+.ripple-btn::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+  background: rgba(255,255,255,0.3);
+  transform: scale(0) translate(-50%, -50%);
+  transition: transform 0.4s ease, opacity 0.8s ease;
+  opacity: 0;
+}
+
+.ripple-btn:active::after {
+  transform: scale(2.5) translate(-50%, -50%);
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.8s ease;
+}
