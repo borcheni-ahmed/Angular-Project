@@ -140,7 +140,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   loadProductChart() {
-    this.analyticsService.getSalesByProduct(5).subscribe(data => {
+    this.analyticsService.getSalesByProduct(6).subscribe(data => {
       const labels = data.map((d: any) => d.productName);
       const revenue = data.map((d: any) => d.totalRevenue);
       this.productChart = new Chart('productChart', {

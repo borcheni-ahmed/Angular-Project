@@ -14,7 +14,7 @@ export class CustomerListComponent implements OnInit {
   loading = true;
   isAdmin = false;
   searchTerm = '';
-  confirmDelete: number | null = null; // stores ID to delete
+  confirmDelete: number | null = null;
 
   constructor(
     private customerService: CustomerService,
@@ -52,7 +52,7 @@ export class CustomerListComponent implements OnInit {
   }
 
   askDelete(id: number) {
-    this.confirmDelete = id; // show custom dialog
+    this.confirmDelete = id;
   }
 
   cancelDelete() {

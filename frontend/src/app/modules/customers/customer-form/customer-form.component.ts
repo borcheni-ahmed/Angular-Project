@@ -46,15 +46,15 @@ export class CustomerFormComponent implements OnInit {
     }
   }
 
-  isFieldInvalid(field: string) {
-    const control = this.form.get(field);
-    return control && control.invalid && (control.dirty || this.submitted);
-  }
+  //isFieldInvalid(field: string) {
+    //const control = this.form.get(field);
+    //return control && control.invalid && (control.dirty || this.submitted);
+  //}
 
-  isFieldValid(field: string) {
-    const control = this.form.get(field);
-    return control && control.valid && control.dirty;
-  }
+  //isFieldValid(field: string) {
+    //const control = this.form.get(field);
+    //return control && control.valid && control.dirty;
+  //}
 
   onSubmit() {
     this.submitted = true;

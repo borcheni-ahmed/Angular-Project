@@ -29,6 +29,18 @@ export class AuthService {
     const payload = JSON.parse(atob(token.split('.')[1]));
     return payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
   }
+  isCustomer(): boolean {
+    return this.getRole() === 'User';
+  }
+  getCustomerId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const customerId = payload['customerId'] || payload['CustomerID'] || null;
+      return customerId ? parseInt(customerId) : null;
+    } catch { return null; }
+  }
 
   isLoggedIn(): boolean {
     return !!this.getToken();

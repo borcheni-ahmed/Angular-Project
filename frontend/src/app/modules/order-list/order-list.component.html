@@ -1,0 +1,198 @@
+<div style="padding:clamp(16px,2vw,32px); min-height:100%;">
+
+  <!-- Header -->
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+    <div>
+      <h1 style="color:white; font-size:clamp(18px,2vw,24px); font-weight:700; margin:0;">My Orders</h1>
+      <p style="color:#64748b; margin-top:4px; font-size:14px;">
+        {{ orders[0]?.customerName ?? '' }}
+      </p>
+    </div>
+    <button (click)="openNew()"
+            style="background:linear-gradient(135deg,#6366f1,#4f46e5); border:none; color:white; padding:10px 20px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px;">
+      + New Order
+    </button>
+  </div>
+
+  <!-- New Order Form -->
+  <div *ngIf="showNewForm"
+       style="background:rgba(30,41,59,0.9); border:1.5px solid #6366f1; border-radius:16px; padding:24px; margin-bottom:24px; animation: slideDown 0.2s ease;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h3 style="color:white; margin:0; font-size:16px; font-weight:600;">New Order</h3>
+      <button (click)="closeNew()"
+              style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer; line-height:1;">✕</button>
+    </div>
+    <app-order-form [isEdit]="false" (saved)="onOrderCreated($event)" (cancelled)="closeNew()"></app-order-form>
+  </div>
+
+  <!-- Edit Order Form -->
+  <div *ngIf="editingOrder"
+       style="background:rgba(30,41,59,0.9); border:1.5px solid #6366f1; border-radius:16px; padding:24px; margin-bottom:24px; animation: slideDown 0.2s ease;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h3 style="color:white; margin:0; font-size:16px; font-weight:600;">
+        Edit Order <span style="color:#818cf8;">#{{ editingOrder.orderID }}</span>
+      </h3>
+      <button (click)="closeEdit()"
+              style="background:none; border:none; color:#64748b; font-size:20px; cursor:pointer; line-height:1;">✕</button>
+    </div>
+    <app-order-form [isEdit]="true" [order]="editingOrder" (saved)="onOrderUpdated($event)" (cancelled)="closeEdit()"></app-order-form>
+  </div>
+
+  <!-- Stats -->
+  <div style="display:flex; gap:16px; margin-bottom:20px; flex-wrap:wrap;">
+    <div style="background:rgba(30,41,59,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:16px 24px; display:flex; flex-direction:column; gap:4px;">
+      <span style="color:white; font-size:22px; font-weight:700;">{{ totalCount }}</span>
+      <span style="color:#64748b; font-size:11px; text-transform:uppercase; letter-spacing:1px; font-weight:600;">Total</span>
+    </div>
+    <div style="background:rgba(30,41,59,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:16px 24px; display:flex; flex-direction:column; gap:4px;">
+      <span style="color:#fbbf24; font-size:22px; font-weight:700;">{{ pendingCount }}</span>
+      <span style="color:#64748b; font-size:11px; text-transform:uppercase; letter-spacing:1px; font-weight:600;">Pending</span>
+    </div>
+    <div style="background:rgba(30,41,59,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:16px 24px; display:flex; flex-direction:column; gap:4px;">
+      <span style="color:#4ade80; font-size:22px; font-weight:700;">{{ deliveredCount }}</span>
+      <span style="color:#64748b; font-size:11px; text-transform:uppercase; letter-spacing:1px; font-weight:600;">Delivered</span>
+    </div>
+  </div>
+
+  <!-- Search & Filter -->
+  <div style="display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
+    <div style="position:relative; flex:1; min-width:200px;">
+      <span style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#475569;">🔍</span>
+      <input [(ngModel)]="searchTerm" (input)="search()" placeholder="Search by order ID or PO number..."
+             style="width:100%; box-sizing:border-box; background:rgba(30,41,59,0.8); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:12px 16px 12px 42px; color:white; font-size:14px; outline:none;"/>
+    </div>
+    <div style="display:flex; gap:6px; background:rgba(30,41,59,0.8); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:4px;">
+      <button (click)="setFilter('all')"
+              [style]="filterStatus === 'all' ?
+          'background:#6366f1; color:white; border:none; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;' :
+          'background:transparent; color:#64748b; border:none; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer;'">
+        All
+      </button>
+      <button (click)="setFilter('En attente')"
+              [style]="filterStatus === 'En attente' ?
+          'background:#6366f1; color:white; border:none; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;' :
+          'background:transparent; color:#64748b; border:none; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer;'">
+        Pending
+      </button>
+      <button (click)="setFilter('Livrée')"
+              [style]="filterStatus === 'Livrée' ?
+          'background:#6366f1; color:white; border:none; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer;' :
+          'background:transparent; color:#64748b; border:none; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:500; cursor:pointer;'">
+        Delivered
+      </button>
+    </div>
+  </div>
+
+  <!-- Skeleton -->
+  <div *ngIf="loading">
+    <div *ngFor="let i of [1,2,3,4,5]" class="skeleton-row"
+         style="background:rgba(30,41,59,0.5); border-radius:10px; height:52px; margin-bottom:8px;"></div>
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="!loading" style="background:rgba(30,41,59,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:16px; overflow:hidden;">
+    <table style="width:100%; border-collapse:collapse; font-size:14px;">
+      <thead>
+      <tr style="background:rgba(15,23,42,0.5); border-bottom:1px solid rgba(255,255,255,0.06);">
+        <th style="padding:14px 20px; text-align:left; color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Order #</th>
+        <th style="padding:14px 20px; text-align:left; color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">PO Number</th>
+        <th style="padding:14px 20px; text-align:left; color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Order Date</th>
+        <th style="padding:14px 20px; text-align:left; color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Expected Delivery</th>
+        <th style="padding:14px 20px; text-align:left; color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Status</th>
+        <th style="padding:14px 20px; text-align:right; color:#64748b; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:1px;">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let order of filtered" class="table-row"
+          [style]="editingOrder?.orderID === order.orderID ?
+            'border-bottom:1px solid rgba(255,255,255,0.04); background:rgba(99,102,241,0.05);' :
+            'border-bottom:1px solid rgba(255,255,255,0.04); transition:background 0.2s;'">
+        <td style="padding:14px 20px; color:#818cf8; font-weight:600;">#{{ order.orderID }}</td>
+        <td style="padding:14px 20px; color:#94a3b8; font-family:monospace;">{{ order.customerPurchaseOrderNumber || '—' }}</td>
+        <td style="padding:14px 20px; color:#94a3b8;">{{ order.orderDate | date:'MMM d, yyyy' }}</td>
+        <td style="padding:14px 20px; color:#94a3b8;">{{ order.expectedDeliveryDate | date:'MMM d, yyyy' }}</td>
+        <td style="padding:14px 20px;">
+            <span [style]="order.status === 'En attente' ?
+              'background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.2); color:#fbbf24; padding:2px 10px; border-radius:20px; font-size:12px; font-weight:500;' :
+              'background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.2); color:#4ade80; padding:2px 10px; border-radius:20px; font-size:12px; font-weight:500;'">
+              {{ order.status === 'En attente' ? '⏳ Pending' : '✅ Delivered' }}
+            </span>
+        </td>
+        <td style="padding:14px 20px; text-align:right;">
+          <ng-container *ngIf="order.status === 'En attente'; else noActions">
+            <button (click)="openEdit(order)"
+                    style="background:rgba(99,102,241,0.1); border:1px solid rgba(99,102,241,0.2); color:#818cf8; padding:4px 12px; border-radius:8px; font-size:12px; font-weight:500; cursor:pointer; margin-right:6px;">
+              ✏️ Edit
+            </button>
+            <button (click)="askCancel(order)"
+                    [disabled]="cancellingId === order.orderID"
+                    style="background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); color:#f87171; padding:4px 12px; border-radius:8px; font-size:12px; font-weight:500; cursor:pointer;">
+              {{ cancellingId === order.orderID ? '...' : '🗑️ Cancel' }}
+            </button>
+          </ng-container>
+          <ng-template #noActions>
+            <span style="color:#475569; font-size:13px;">—</span>
+          </ng-template>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- Empty state -->
+    <div *ngIf="filtered.length === 0"
+         style="text-align:center; padding:48px; color:#475569;">
+      <div style="font-size:48px; margin-bottom:12px;">🛒</div>
+      <p style="font-size:15px; font-weight:500; color:#64748b;">No orders found</p>
+      <p style="font-size:13px; color:#475569; margin-top:4px;">Try a different filter or create a new order</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Custom Cancel Confirm Dialog -->
+<div *ngIf="confirmCancelOrder" class="overlay"
+     style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:1000; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px);">
+  <div class="modal"
+       style="background:#1e293b; border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:32px; max-width:400px; width:90%; text-align:center; box-shadow:0 25px 50px rgba(0,0,0,0.5);">
+    <div style="font-size:48px; margin-bottom:16px;">🗑️</div>
+    <h3 style="color:white; font-size:18px; font-weight:700; margin:0 0 8px 0;">Cancel Order #{{ confirmCancelOrder.orderID }}?</h3>
+    <p style="color:#64748b; font-size:14px; margin:0 0 24px 0;">This action cannot be undone. Your order will be permanently cancelled.</p>
+    <div style="display:flex; gap:12px; justify-content:center;">
+      <button (click)="cancelDialog()"
+              style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#94a3b8; padding:10px 24px; border-radius:10px; font-size:14px; font-weight:500; cursor:pointer;">
+        Keep Order
+      </button>
+      <button (click)="confirmCancelAction()"
+              style="background:linear-gradient(135deg,#ef4444,#dc2626); border:none; color:white; padding:10px 24px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;">
+        Yes, Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position: 400px 0; }
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .table-row:hover { background: rgba(255,255,255,0.02) !important; }
+  .skeleton-row {
+    background: linear-gradient(90deg, rgba(30,41,59,0.5) 25%, rgba(51,65,85,0.5) 50%, rgba(30,41,59,0.5) 75%);
+    background-size: 400px 100%;
+    animation: shimmer 1.5s infinite;
+  }
+  .modal { animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .overlay { animation: fadeIn 0.2s ease forwards; }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+</style>

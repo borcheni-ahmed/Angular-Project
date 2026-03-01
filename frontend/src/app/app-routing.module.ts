@@ -7,6 +7,7 @@ import { MainLayoutComponent } from './modules/layout/main-layout/main-layout.co
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { CustomerListComponent } from './modules/customers/customer-list/customer-list.component';
 import { CustomerFormComponent } from './modules/customers/customer-form/customer-form.component';
+import {OrderListComponent} from "./modules/order-list/order-list.component";
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -19,7 +20,8 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'customers', component: CustomerListComponent, canActivate: [AuthGuard] },
       { path: 'customers/create', component: CustomerFormComponent, canActivate: [AuthGuard, AdminGuard] },
-      { path: 'customers/edit/:id', component: CustomerFormComponent, canActivate: [AuthGuard, AdminGuard] }
+      { path: 'customers/edit/:id', component: CustomerFormComponent, canActivate: [AuthGuard, AdminGuard] },
+      { path: 'orders', component: OrderListComponent, canActivate: [AuthGuard] }
     ]
   },
   { path: '**', redirectTo: 'login' }

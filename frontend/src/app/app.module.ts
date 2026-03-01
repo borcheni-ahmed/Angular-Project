@@ -14,6 +14,8 @@ import { CustomerListComponent } from './modules/customers/customer-list/custome
 import { CustomerFormComponent } from './modules/customers/customer-form/customer-form.component';
 import { ToastComponent } from './core/components/toast/toast.component';
 import { FormsModule } from '@angular/forms';
+import { OrderListComponent } from './modules/order-list/order-list.component';
+import { OrderFormComponent } from './modules/order-form/order-form.component';
 
 
 @NgModule({
@@ -26,7 +28,9 @@ import { FormsModule } from '@angular/forms';
     DashboardComponent,
     CustomerListComponent,
     CustomerFormComponent,
-    ToastComponent
+    ToastComponent,
+    OrderListComponent,
+    OrderFormComponent
   ],
   imports: [
     BrowserModule,
